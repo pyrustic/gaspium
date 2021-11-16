@@ -148,41 +148,8 @@ A GASP framework with a permissive license was created in Python to serve as an 
 
 
 ## 8. Conclusion
-I have proposed a metaphor that makes several aspects of GUI programming simpler. This metaphor is encapsulated in a framework whose reference implementation called Gaspium is freely accessible on GitHub. The application developer adds graphical components on pages that represent logical units of the application. A GASP application is command-line-friendly since you can open an arbitrary page directly from the command line and even pass data to it from the command line.
+I have proposed a metaphor that makes several aspects of GUI programming simpler. This metaphor is encapsulated in a framework whose reference implementation called [Gaspium](https://github.com/pyrustic/gaspium) is freely accessible on GitHub. The application developer adds graphical components on pages that represent logical units of the application. A GASP application is command-line-friendly since you can open an arbitrary page directly from the command line and even pass data to it from the command line.
 
 
 
 _Alex Rustic_
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
