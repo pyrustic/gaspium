@@ -107,7 +107,7 @@ def get_row_1(app):
     pass
 
 
-if __name__ == "__main__":
+def main():
     app = App(width="920", height="537")
 
     home_page = get_home_page(app)
@@ -121,3 +121,7 @@ if __name__ == "__main__":
 
 
     app.start()
+
+
+if __name__ == "__main__":
+    main()

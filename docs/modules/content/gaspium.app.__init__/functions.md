@@ -4,7 +4,7 @@ Back to [Modules overview](https://github.com/pyrustic/gaspium/blob/master/docs/
 >## gaspium.app.\_\_init\_\_
 No description
 <br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.app.__init__/classes.md)
+[classes (2)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.app.__init__/classes.md)
 
 
 ## Functions

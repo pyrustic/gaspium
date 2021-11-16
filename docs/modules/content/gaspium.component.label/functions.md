@@ -1,10 +1,10 @@
 Back to [Modules overview](https://github.com/pyrustic/gaspium/blob/master/docs/modules/README.md)
   
 # Module documentation
->## gaspium.page.\_\_init\_\_
+>## gaspium.component.label
 No description
 <br>
-[classes (2)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.page.__init__/classes.md)
+[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.label/classes.md)
 
 
 ## Functions
