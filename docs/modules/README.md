@@ -12,6 +12,12 @@ No description
 <br>
 [constants (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.__main__/constants.md) &nbsp;.&nbsp; [functions (4)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.__main__/functions.md)
 
+**gaspium.app.\_\_init\_\_**
+<br>
+No description
+<br>
+[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.app.__init__/classes.md)
+
 **gaspium.error.\_\_init\_\_**
 <br>
 No description

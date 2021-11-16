@@ -6,7 +6,7 @@ from cyberpunk_theme import Cyberpunk
 from gaspium import error
 
 
-__all__ = []
+__all__ = ["App"]
 
 
 class App:

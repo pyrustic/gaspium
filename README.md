@@ -240,7 +240,7 @@ app.start()
 </details>
 
 <div align="center">
-    <img src="https://raw.githubusercontent.com/pyrustic/misc/master/assets/gaspium/login-demo.png" alt="Figure" width="674" height="791">
+    <img src="https://raw.githubusercontent.com/pyrustic/misc/master/assets/gaspium/login-demo.png" alt="Figure" width="514" height="369">
     <p align="center">
     <i> Demo </i>
     </p>
