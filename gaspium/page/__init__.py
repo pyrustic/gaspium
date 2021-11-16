@@ -6,7 +6,7 @@ from gaspium import error
 from collections import namedtuple
 
 
-__all__ = []
+__all__ = ["Page"]
 
 
 class Page:

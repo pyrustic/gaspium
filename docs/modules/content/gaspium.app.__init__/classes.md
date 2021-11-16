@@ -14,7 +14,7 @@ class App(object):
     This is the entry point of your Gaspium app
     """
 
-    def __init__(self, title='Application', width=800, height=500, theme=<cyberpunk_theme.Cyberpunk object at 0x7f76cf6a5b20>, caching=False, resizable=(False, True), on_exit=None):
+    def __init__(self, title='Application', width=800, height=500, theme=<cyberpunk_theme.Cyberpunk object at 0x7fd2371dcfa0>, caching=False, resizable=(False, True), on_exit=None):
         """
         Parameters
         ==========

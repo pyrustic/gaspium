@@ -23,3 +23,9 @@ No description
 No description
 <br>
 [classes (9)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error.__init__/classes.md)
+
+**gaspium.page.\_\_init\_\_**
+<br>
+No description
+<br>
+[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.page.__init__/classes.md)
