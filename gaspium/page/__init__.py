@@ -6,9 +6,6 @@ from gaspium import error
 from collections import namedtuple
 
 
-__all__ = ["Page"]
-
-
 class Page:
     def __init__(self, pid=None, name="Page",
                  scrolling="vertical",

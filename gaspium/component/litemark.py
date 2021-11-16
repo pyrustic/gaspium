@@ -5,9 +5,6 @@ from gaspium import Component, error
 import litemark
 
 
-__all__ = []
-
-
 class Litemark(Component):
     def __init__(self, page, cid):
         super().__init__(page, cid)

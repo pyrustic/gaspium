@@ -4,9 +4,6 @@ from collections import namedtuple
 from gaspium import Component, error
 
 
-__all__ = []
-
-
 class Editor(Component):
     def __init__(self, page, cid):
         super().__init__(page, cid)

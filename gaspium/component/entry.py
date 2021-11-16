@@ -3,9 +3,6 @@ from collections import namedtuple
 from gaspium import Component, error
 
 
-__all__ = []
-
-
 class Entry(Component):
     def __init__(self, page, cid):
         super().__init__(page, cid)

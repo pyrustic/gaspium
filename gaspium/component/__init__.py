@@ -11,7 +11,3 @@ from gaspium.component.pathfield import PathField
 from gaspium.component.spinbox import SpinBox
 from gaspium.component.table import Table
 #  TODO: add Slider and Tree
-
-__all__ = ["Frame", "Button", "Choice", "Entry", "OptionMenu",
-           "Editor", "Image", "Label", "Litemark", "PathField",
-           "SpinBox", "Table"]

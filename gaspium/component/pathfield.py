@@ -4,9 +4,6 @@ from gaspium import Component, error
 import megawidget
 
 
-__all__ = []
-
-
 class PathField(Component):
     def __init__(self, page, cid):
         super().__init__(page, cid)

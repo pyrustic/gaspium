@@ -2,9 +2,6 @@ import tkinter as tk
 from gaspium import Component, error
 
 
-__all__ = []
-
-
 class Frame(Component):
     def __init__(self, page, cid):
         super().__init__(page, cid)

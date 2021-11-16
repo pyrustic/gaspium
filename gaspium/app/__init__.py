@@ -6,9 +6,6 @@ from cyberpunk_theme import Cyberpunk
 from gaspium import error
 
 
-__all__ = ["App"]
-
-
 class App:
     """This is the entry point of your Gaspium app"""
     def __init__(self, title="Application", width=800, height=500,
