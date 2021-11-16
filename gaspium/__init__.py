@@ -3,6 +3,9 @@ from gaspium.page import Page
 from gaspium.page import error
 
 
+__all__ = ["App", "Page", "Component"]
+
+
 class Component:
     def __init__(self, page, cid):
         self._page = page
