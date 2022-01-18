@@ -1,3 +1,4 @@
+"""This module exposes the default components classes (Button, Frame, Table, et cetera.)"""
 from gaspium.component.frame import Frame
 from gaspium.component.button import Button
 from gaspium.component.choice import Choice

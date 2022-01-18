@@ -1,25 +1,29 @@
+"""The App class is defined inside this module."""
 import sys
 import tkinter as tk
 from viewable import Viewable
 from tkf import App as TkfApp
 from cyberpunk_theme import Cyberpunk
 from gaspium import error
+from gaspium.page import get_info_instance_2
 
 
 class App:
-    """This is the entry point of your Gaspium app"""
+    """This class is the entry point of your Gaspium app"""
     def __init__(self, title="Application", width=800, height=500,
                  theme=Cyberpunk(), caching=False,
                  resizable=(False, True), on_exit=None):
         """
-        Parameters
-        ==========
+        Init.
+
+        [parameters]
         - title: string, the title of the app
         - width: int, the width of the app
         - height: int, the height of the app
-        - scrolling: the orient of the scrollbar, "vertical", "horizontal", "both".
         - theme: the theme, i.e. an instance of tkstyle.Theme
-        - on_exit: the on_exit handler, ie a function that will be called on exit.
+        - caching: boolean to tell if whether you want pages to be cached or built at open.
+        - resizable: tuple of boolean to tell if you want the width and the height of the app to be resizable.
+        - on_exit: the on_exit handler, i.e. a function that will be called on exit.
         """
         self._title = title
         self._width = width
@@ -40,6 +44,8 @@ class App:
         self._tkf_app = TkfApp()
         self._root = self._tkf_app.root
         self._opening = False
+        self._busy_closing_page = False
+        self._opened_pages_count = 0
         self._started = False
         self._home = None
         self._data = {}
@@ -47,132 +53,175 @@ class App:
 
     @property
     def title(self):
-        """Return the title of the app"""
+        """
+        Return the title of the app
+        """
         return self._title
 
     @title.setter
     def title(self, val):
-        """Set the title of the app"""
+        """
+        Set the title of the app
+        """
         if self._started and self._title:
             raise error.AlreadyDefinedError
         self._title = val
 
     @property
     def width(self):
-        """Return the width of the app"""
+        """
+        Return the width of the app
+        """
         return self._width
 
     @width.setter
     def width(self, val):
-        """Set the width of the app"""
+        """
+        Set the width of the app
+        """
         if self._started and self._width:
             raise error.AlreadyDefinedError
         self._width = val
 
     @property
     def height(self):
-        """Return the height of the app"""
+        """
+        Return the height of the app
+        """
         return self._height
 
     @height.setter
     def height(self, val):
-        """Set the height of the app"""
+        """
+        Set the height of the app
+        """
         if self._started and self._height:
             raise error.AlreadyDefinedError
         self._height = val
 
     @property
     def theme(self):
-        """Return the current theme"""
+        """
+        Return the current theme
+        """
         return self._theme
 
     @theme.setter
     def theme(self, val):
-        """Set a theme, ie, a themebase.Theme instance"""
+        """
+        Set a theme, i.e., a tkstyle.Theme instance
+        """
         if self._started and self._theme:
             raise error.AlreadyDefinedError
         self._theme = val
 
     @property
     def caching(self):
-        """Return a boolean to indicate if the caching option is True or False.
-        By default, caching is set to False."""
+        """
+        Return a boolean to indicate if the caching option is True or False.
+        """
         return self._caching
 
     @caching.setter
     def caching(self, val):
-        """Set True if you want pages to be cached. Cached pages retains their data.
-        By default, caching is set to False."""
+        """
+        Set True if you want pages to be cached. Cached pages retains their data.
+        """
         if self._started and self._caching:
             raise error.AlreadyDefinedError
         self._caching = val
 
     @property
     def resizable(self):
-        """Return the resizable tuple state"""
+        """
+        Return the resizable booleans tuple
+        """
         return self._tkf_app.resizable
 
     @resizable.setter
     def resizable(self, val):
+        """
+        Set the resizable booleans tuple
+        """
         if self._started:
             raise error.AlreadyDefinedError
         self._tkf_app.resizable = val
 
     @property
     def on_exit(self):
-        """Return the on_exit handler"""
+        """
+        Return the on_exit callback
+        """
         return self._on_exit
 
     @on_exit.setter
     def on_exit(self, val):
-        """Set the on_exit handler. The handler is a function that accepts no argument"""
+        """
+        Set the on_exit handler. The handler is a function that accepts no argument
+        """
         if self._started and self._on_exit:
             raise error.AlreadyDefinedError
         self._on_exit = val
 
     @property
     def home(self):
+        """
+        Return the home page instance, i.e. the first page added to this app
+        """
         return self._home
 
     @property
     def page(self):
-        """Return the currently opened page"""
+        """
+        Return the currently opened page instance
+        """
         return self._page
 
     @property
     def pages(self):
-        """Return an internal dictionary that contains pages. Keys are pages ids"""
+        """
+        Return the copy of an internal dictionary that contains pages.
+        Note: Keys are PIDs (Page ID)
+        """
         return self._pages.copy()
 
     @property
     def root(self):
-        """root"""
+        """
+        Return the root, i.e. the Tkinter's Tk instance that serves as the root of this app.
+        """
         return self._root
 
     @property
     def body(self):
-        """Body frame"""
+        """
+        Return the Body frame of this app, i.e. the tkinter.Frame instance that serves of the body of this app
+        """
         if self._view:
             return self._view.body
         return None
 
     @property
     def data(self):
-        """Dictionary Data linked to this app"""
+        """
+        This is an empty dictionary linked to this app.
+        Use it to store whatever you want.
+        Example: you can use it to retain the information about whether the user is authenticated or not."""
         return self._data
 
     def add(self, page, indexable=True, category=None):
-        """ Add a page to the app.
-        Parameters
-        ==========
-            - page: an instance of gaspium.page.Page
-            - indexable: boolean, if False, the page won't be indexed in the menubar
-            - category: string, the menu category name under
-             which the page is indexed
+        """
+        Add a page instance to the app.
 
+        [parameters]
+        - page: an instance of gaspium.page.Page
+        - indexable: boolean, if False, the page won't be indexed in the menubar
+        - category: string, the menu category name under which the page is indexed
+
+        [return value]
         Returns the pid
 
-        Raises gaspium.error.DuplicatePageError if the pid already exists
+        Raises 'gaspium.error.DuplicatePageError' if the pid already exists
         """
         if not page.app:
             page.app = self
@@ -195,32 +244,57 @@ class App:
         return pid
 
     def new_pid(self):
+        """
+        Generate a new valid PID (Page ID).
+        A PID value follows this pattern: 'pid-x', with x being an integer
+
+        [return value]
+        A new valid PID
+        """
         self._pids_count += 1
         return "pid-{}".format(self._pids_count)
 
     def open(self, pid, data=None):
-        """ Open a page specified by its pid
-        Raise gaspium.error.PageNotFoundError if not page is associated to this PID
-        Raise gaspium.error.NestedOpeningError if you try to open a new page inside
-        on_open and on_close callbacks
         """
-        if self._opening:
-            msg = "Don't open a new page inside on_open and on_close callbacks"
-            raise error.NestedOpeningError(msg)
+        Open a page specified by its PID (Page ID).
+
+        [parameters]
+        - pid: PID
+        - data: Associated data. This data is passed to the 'on_open' callback of the page.
+         Note: If you open this page from the command line, the data passed is split into a tuple.
+
+        [return value]
+        Raise gaspium.error.PageNotFoundError if not page is associated to this PID.
+        Raise gaspium.error.PageStateError if you try to open a new page inside 'on_close' callback.
+        """
+        if self._busy_closing_page:
+            msg = "Don't open a new page inside 'on_close' callback"
+            raise error.PageStateError(msg)
         if not self._view.body:
             self._todo_open_cache.append((pid, data))
             return
         if pid not in self._pages:
             raise error.PageNotFoundError
         self._opening = True
+        self._opened_pages_count += 1
+        cache = self._opened_pages_count
         if self._page:
+            self._busy_closing_page = True
             self._page.private_close_method()
+            self._busy_closing_page = False
         self._page = self._pages[pid]
-        self._page.private_open_method(data)
+        # on open
+        if self._page.on_open:
+            info = get_info_instance_2(self, self._page, pid, data)
+            self._page.on_open(info)
+        if cache == self._opened_pages_count:
+            self._page.private_open_method()
         self._opening = False
 
     def start(self):
-        """ Start the app. Mainloop here."""
+        """
+        Start the app. Mainloop here.
+        """
         self._started = True
         # open home
         if self._home:
@@ -229,7 +303,9 @@ class App:
             self._tkf_app.start()
 
     def exit(self):
-        """Exit the app"""
+        """
+        Exit the app.
+        """
         self._tkf_app.exit()
 
     def _setup(self):

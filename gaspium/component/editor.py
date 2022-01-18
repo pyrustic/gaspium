@@ -26,7 +26,8 @@ class Editor(Component):
             title_label = tk.Label(self._body, textvariable=self._strvar_title)
             title_label.pack(anchor="nw", pady=(0, 2))
         # create text widget
-        self._text_widget = ScrolledText(self._body, width=width, height=height)
+        self._text_widget = ScrolledText(self._body, width=width, height=height,
+                                         wrap="word")
         self._text_widget.pack(fill=fill, expand=expand)
         # fill text widget
         if text is not None:

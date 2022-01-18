@@ -1,53 +1,59 @@
 <!-- Cover -->
 <div align="center">
-    <img src="https://raw.githubusercontent.com/pyrustic/misc/master/assets/gaspium/cover.png" alt="Figure" width="934" height="606">
+    <img src="https://raw.githubusercontent.com/pyrustic/misc/master/assets/gaspium/cover.png" alt="Demo" width="920">
     <p align="center">
     <i> </i>
     </p>
 </div>
 
 # Gaspium
-**Python framework to build apps with the GASP metaphor**
+**High-productivity framework to build Python apps.**
 
 This project is part of the [Pyrustic Open Ecosystem](https://pyrustic.github.io).
+> [Installation](#installation) . [Demo](#demo) . [Latest](https://github.com/pyrustic/gaspium/tags) . [Documentation](https://github.com/pyrustic/gaspium/tree/master/docs#readme)
 
-[Installation](#installation) | [Documentation](https://github.com/pyrustic/gaspium/tree/master/docs/modules#readme) | [Latest](https://github.com/pyrustic/gaspium/tags)
-
-**Table of contents**
-- [Overview](#overview)
-- [App](#app)
+## Table of contents
+- [Overview](#overview) 
+- [App](#app) 
 - [Page](#page)
-- [Component](#component)
+- [Component](#component) 
+- [Default components](default-components) 
+- [Layout](#layout)
+- [Command line interface](#command-line-interface)
+- [Batteries included](#batteries-included)
 - [Installation](#installation)
-- [Default components](#default-components)
-
+- [Demo](#demo) 
 
 # Overview
-**Gaspium** is a framework that allows you to create applications with the **GASP** metaphor. To understand the GASP metaphor, please read this [white paper](https://github.com/pyrustic/gaspium/blob/master/whitepaper.md).
+**Gaspium** is a framework that allows you to create applications with the **GASP** (**G**UI **A**s **S**tapled **P**ages) metaphor. 
 
-In short, we define pages to which we add graphical components. Then we add these pages to an instance of the App class. The first page added is de facto the home page and it will be open when the application is started. Adding a page makes it automatically referenced in the application's navigation bar. Each graphical component can be identified with a unique identifier in order to be able to read its content or update it. Each page has a unique identifier assigned automatically or manually. You can open an arbitrary page directly from the command line.
+In short, we define **pages** to which we add graphical **components**. Graphical **components** are placed on a **page** with a single line of code since the layout mechanism is controlled with only five keyword arguments (**parent**, **side**, **anchor**, **fill**, and **expand**) whose defaults are sufficient in most cases.
 
-**Gaspium** is suitable for:
-- building internal tools;
-- teaching GUI programming;
-- building GUI wrapper for command line scripts;
-- prototyping;
-- building utilities for yourself or other programmers;
-- lightweight commercial apps;
-- et cetera.
+Then we add these **pages** to an instance of the **App** class. The first **page** added is de facto the **home page** and it will be open when the application is started.
+
+Adding a **page** makes it automatically referenced in the application's **navigation bar**.
+
+Each graphical component can be identified with a unique **identifier** in order to be able to read its content or update it. Each page has a unique **identifier** assigned automatically or manually.
+
+You can open an arbitrary **page** of your application directly from the **command line**.
+
+**Gaspium** serves as the reference implementation of the **GASP concept**. You can implement the **GASP** concept in another language or with another GUI toolkit (**Gaspium** is based on **TkF** which uses **Tkinter** the default GUI toolkit of **Python**)
+
+**Discover the [GASP concept](https://github.com/pyrustic/gaspium/blob/master/gasp.md).**
+
 
 # App
 It is the main class of the framework.
 
-Here's a code snippet:
+Here's a commented code snippet:
 ```python
 from gaspium import App
 
 app = App()
 # by default the app is initialized with:
-# title="Application", width=800, height=500,
-# theme=Cyberpunk(), caching=False,
-# resizable=(False, True), on_exit=None"""
+#   title="Application", width=800, height=500,
+#   theme=Cyberpunk(), caching=False,
+#   resizable=(False, True), on_exit=None"""
 
 # ...
 # here you add pages to the app
@@ -59,13 +65,13 @@ app = App()
 app.start()
 ```
 
-Read the documentation of [gaspium.App](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium/classes.md).
+**Read the [App Guide](https://github.com/pyrustic/gaspium/blob/master/docs/guides/app.md) or play with the [Demo](#demo).**
 
 
 # Page
-A page is a view that is added to the instance of the App class.
+A **page** is a view that is added to the instance of the **App** class.
 
-Here's a code snippet:
+Here's a commented code snippet:
 ```python
 from gaspium import App, Page
 
@@ -77,12 +83,12 @@ page_a = Page(name="Page-A")
 app.add(page_a)
 
 # Define and add Page B.
-# Assign 'page-b' as page id (pid) to this page
+# Assign 'page-b' as PID (Page ID) to this page
 page_b = Page(name="Page-B", pid="page-b")
 app.add(page_b)
 
 # Define and add Page C
-# The pid automatically assigned to a page
+# The PID automatically assigned to a page
 # can be retrieved via the page property 'pid'
 page_c = Page(name="Page-C")
 app.add(page_c)
@@ -92,34 +98,37 @@ app.start()
 
 ```
 
-Read the documentation of [gaspium.Page](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium/classes.md).
+**Read the [Page Guide](https://github.com/pyrustic/gaspium/blob/master/docs/guides/page.md) or play with the [Demo](#demo).**
 
 
 # Component
-A graphical component is a widget or group of widgets that you add to a page and with which the user interacts.
+A graphical **component** is a widget or group of widgets that you add to a page and with which the user interacts.
 
-Here's a code snippet:
+Here's a commented code snippet:
 ```python
 from gaspium import App, Page
-from gaspium.component import Label, Entry, Button
+import gaspium.component as comp
 
 
 def login(info):
+    """Callback function called when the user clicks the login Button"""
     # We can retrieve via 'info' the content of the form (username, password)
     # and then process it, update the content of the page (add another component, ...),
-    # pop-up some information to the user, programmatically open another page, et cetera.
+    # pop-up some information to the user, programmatically open another page, et cetera
     pass
 
 
 def get_page():
+    """This function returns a page with a login form on it"""
     page = Page()
-    # Add the Label graphical component
-    page.add(Label, text="Login")
-    # You can change the default layout config
-    # with the parameters 'parent', 'side', 'anchor', 'fill', and 'expand'
-    page.add(Entry, title="Username")
-    page.add(Entry, title="Password", secretive=True)
-    page.add(Button, on_click=login)
+    # In the next lines we will add graphical components to make a login form.
+    # This form will be made of Username, and Password text fields plus a button.
+    # Note that you can control the layout mechanism with five parameters:
+    # 'parent', 'side', 'anchor', 'fill', and 'expand'
+    page.add(comp.Label, text="Login")
+    page.add(comp.Entry, title="Username")
+    page.add(comp.Entry, title="Password", secretive=True)
+    page.add(comp.Button, on_click=login)
     return page
 
 
@@ -132,127 +141,82 @@ app.start()
 
 ```
 
-Read the documentation of [gaspium.Component](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium/classes.md).
+Also to improve the developer experience, **Gaspium** comes with a feature that helps you configure a given graphical component. Suppose you want to configure the `Label` graphical component, but you don't want to go to its documentation to see the list of valid options. You just have to pass a bogus parameter (like: `oops = True`) which will raise an exception and display the list of valid options.
 
-# Demo
-You can copy paste this code snippet and run it as it:
-
-<details>
-  <summary>Click to expand or collapse </summary>
-
-```python
-from gaspium import App, Page
-from gaspium.component import Frame, Label, Entry, Button
-from cyberpunk_theme.widget.button import get_button_red_style
+**Read the [Component Guide](https://github.com/pyrustic/gaspium/blob/master/docs/guides/component.md) or play with the [Demo](#demo).**
 
 
-def login(info):
-    # We can retrieve via the named tuple 'info' the content of the form (username, password)
-    # and then process it, update the content of the page (add another component, ...),
-    # pop-up some information to the user, programmatically open another page, et cetera.
-    app = info.app
-    page = info.page
-    username = page.read("username")
-    password = page.read("password")
-    accepted = False
-    if not username or not password:
-        msg = "Please submit fill the form !"
-    else:
-        accepted = True
-        msg = "Hello {}".format(username)
-    # the parameter 'blocking' tells if you want this toast to block the execution flow or not
-    page.toast(msg, blocking=True)
-    if accepted:
-        # You can retrieve the linked data from the on_open callback associated
-        # to the page 'welcome'
-        app.open("welcome", data=username)
+# Default Components
+The following graphical components are included by default in the **Gaspium** framework: 
+
+`Button` `Choice` `Editor` `Entry` `Frame` `Image` `Label` `Litemark` `OptionMenu` `PathField` `SpinBox` `Table`.
+
+**Gaspium** has been implemented to also allow developers to collaborate: it's easy to create your own components and share them with other developers as installable packages.
+
+**Discover [Default Components](https://github.com/pyrustic/gaspium/blob/master/docs/guides/default-components.md) or [Create Your Own Component](https://github.com/pyrustic/gaspium/blob/master/docs/guides/component-creation.md).**
 
 
-def get_page_a(app):
-    page = Page(name="Home")
-    # A Frame is container that fills the width of the page by default, like a row.
-    # When you add a Frame to the page, it becomes implicitly the parent
-    # of the next components except the next Frames
-    page.add(Frame)
-    # By default, components (except Frames) are packed from left to right
-    # on the previously added Frame. You can change change the parent of a component
-    # by using the keyword argument 'parent' that takes a component id (cid)
-    page.add(Label, text="Login", color="gray")
-    # The next Frame will be the container of the form
-    page.add(Frame)
-    # The two next lines are entries (the form)
-    page.add(Entry, cid="username", title="Username")
-    page.add(Entry, cid="password", title="Password", secretive=True)
-    # This Frame will be the container of the next Button
-    page.add(Frame)
-    # add the Quit button
-    on_click = lambda info, app=app: app.exit()
-    page.add(Button, text="Quit", on_click=on_click, style=get_button_red_style())
-    # add the login button
-    page.add(Button, on_click=login)
-    return page
+# Layout
+Each **page** in a **GASP** app has a default frame on which whatever component you add is lay. You are free to arrange new frames on the main frame.
 
+The layout mechanism is controlled with **five** parameters accepted by the graphical component.
 
-def get_page_b():
-    page = Page(pid="welcome")
-    page.add(Label, text="Welcome !")
-    return page
+|Keyword|Description|
+|---|---|
+|parent|The CID (Component ID) of the parent widget|
+|anchor|It specifies where to position a graphical component on its parent. Valid values are the strings `'center'`, `'n'`, `'ne'`, `'e'`, `'se'`, `'s'`, `'sw'`, `'w'`, `'nw'`|
+|expand|Boolean to specifies whether the component should be expanded to consume extra space in their container|
+|fill|Stretch the component. Valid values are `None`, `'x'`, `'y'`, and `'both'`|
+|side|Use the string values `'left'`, `'right'`, `'top'`, and `'bottom'` to specify which side of the parent the graphical component will be packed against|
 
+**Read the [Layout Guide](https://github.com/pyrustic/gaspium/blob/master/docs/guides/layout.md) or play with the [Demo](#demo).**
 
-def get_page_c():
-    page = Page(name="Documentation")
-    page.add(Label, text="Documentation")
-    return page
+# Command line interface
+**Gaspium** makes your application very convenient and **command-line-friendly**.
 
+Suppose you have created a **calc.py** application with **Gaspium**. Your app has two pages: `Calculator` and `About`. These pages are marked with the PIDs: `calculator` and `about`.
 
-def get_page_d():
-    page = Page(name="About")
-    page.add(Label, text="About")
-    return page
+Here's how to open the `About` page directly from the command line:
 
+```bash
+$ python -m calc about
+```
+You can, from the command line, open an arbitrary page with data passed as an argument (provided that you have written code to process the `data` argument in the `on_open` callback of the page):
 
-app = App(title="Login Demo", width=500, height=300)
-
-# get page_a (de facto the home page)
-page_a = get_page_a(app)
-# add page_a
-app.add(page_a)
-
-# get page_b
-page_b = get_page_b()
-# this page won't be referenced in the navigation bar
-app.add(page_b, indexable=False)
-
-# get page_c
-page_c = get_page_c()
-# add page_c (referenced in the navigation bar under the dropdown menu 'Help')
-app.add(page_c, category="Help")
-
-# get page_d
-page_d = get_page_d()
-# add page_d (referenced in the navigation bar under the dropdown menu 'Help')
-app.add(page_d, category="Help")
-
-# start the app
-app.start()
+```bash
+$ python -m calc calculator 34+8
 ```
 
-</details>
+In the last example, the Calculator page might open with its user interface populated with data passed in the command line.
 
-<div align="center">
-    <img src="https://raw.githubusercontent.com/pyrustic/misc/master/assets/gaspium/login-demo.png" alt="Figure" width="514" height="369">
-    <p align="center">
-    <i> Demo </i>
-    </p>
-</div>
+**Play with the [Demo](#demo).**
+
+# Batteries included
+**Gaspium** comes with a handful of useful lightweight packages.
+
+|Name | Description|
+|---|---|
+|[Shared](https://github.com/pyrustic/shared) |  Library to store, expose, read, and edit **collections** of data|
+|[TkStyle](https://github.com/pyrustic/tkstyle) | Library to create **styles** and **themes** for Python apps|
+|[Cyberpunk-Theme](https://github.com/pyrustic/cyberpunk-theme) | A modern **dark theme** for Python apps|
+|[Winter-Theme](https://github.com/pyrustic/winter-theme) | A modern **light theme** for Python apps|
+|[Litemark](https://github.com/pyrustic/litemark) | Lightweight **Markdown** dialect for Python apps|
+|[Megawidget](https://github.com/pyrustic/megawidget) | Collection of **megawidgets** to build graphical user interfaces for Python apps|
+|[Viewable](https://github.com/pyrustic/viewable) | Class to implement a GUI view with **lifecycle**|
+|[Threadom](https://github.com/pyrustic/threadom) | Tkinter-compatible **multithreading**|
+|[Suggestion](https://github.com/pyrustic/suggestion) | Democratizing **auto-complete**(suggest) for Python desktop applications|
+|[Kurl](https://github.com/pyrustic/kurl) | Konnection URL: **HTTP requests** in Python with an implementation of **conditional request** and a **responses caching** system|
+|[Litedao](https://github.com/pyrustic/litedao) | Library to perform intuitive interaction with **SQLite** database|
+|[Probed](https://github.com/pyrustic/probed) | Probed **collections** for Python|
+
 
 # Installation
-`Gaspium` is `cross platform` and versions under `1.0.0` will be considered `Beta` at best. It is built on [Ubuntu](https://ubuntu.com/download/desktop) with [Python 3.8](https://www.python.org/downloads/) and should work on `Python 3.5` or newer.
+**Gaspium** is **cross platform** and versions under **1.0.0** will be considered **Beta** at best. It is built on [Ubuntu](https://ubuntu.com/download/desktop) with [Python 3.8](https://www.python.org/downloads/) and should work on **Python 3.5** or **newer**.
 
 ## For the first time
 
 ```bash
-pip install gaspium
+$ pip install gaspium
 ```
 
 ## Upgrade
@@ -261,10 +225,27 @@ $ pip install gaspium --upgrade --upgrade-strategy eager
 
 ```
 
+## Make your project packageable
+**Backstage** is an extensible command line tool for managing software projects. By default, it supports Python, so you can run the `init` command to make your Python project [packageable](https://packaging.python.org/en/latest/tutorials/packaging-projects/):
 
-# Default Components
-The following components are included by default in the **Gaspium** framework: `Button` `Choice` `Editor` `Entry` `Frame` `Image` `Label` `Litemark` `OptionMenu` `PathField` `SpinBox` `Table`
+```bash
+$ cd /path/to/project
+$ backstage init
+Project successfully initialized !
+```
 
-Read the [documentation](https://github.com/pyrustic/gaspium/blob/master/docs/modules/README.md) !
+You can also create a distribution package of your project with the `build` command, then publish it to [PyPI](https://pypi.org/) with the `release` command, et cetera.
 
-Work in progress...
+**Discover [Backstage](https://github.com/pyrustic/backstage) !**
+
+
+# Demo
+A demo is available to play with as a **Github Gist**. Feel free to give a feedback in the comments section.
+
+**Play with the [Demo](https://gist.github.com/pyrustic/79c9ee0efde8c06b7d4685f3c58b7761).**
+
+<br>
+<br>
+<br>
+
+[Back to top](#readme)

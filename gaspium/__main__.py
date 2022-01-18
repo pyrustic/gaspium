@@ -1,3 +1,4 @@
+"""Demo. Note: this demo needs an image that is only on my computer."""
 from gaspium import App, Page
 from gaspium.component import Frame, Label, Choice, Button, Editor, Entry, Table, Image, SpinBox, PathField, OptionMenu
 from cyberpunk_theme.widget.button import get_button_dark_style, get_button_dark_filled_style, get_button_blue_style, get_button_blue_filled_style, get_button_green_style, get_button_green_filled_style, get_button_yellow_style, get_button_yellow_filled_style, get_button_red_style, get_button_red_filled_style
@@ -20,6 +21,7 @@ This project is part of the Pyrustic Open Ecosystem.
 
 """
 
+
 def get_home_page(app):
     page = Page(name="Home", scrolling=None)
     # Row 1
@@ -34,8 +36,8 @@ def get_home_page(app):
     page.add(Editor, parent="frame1", fill="both", expand=True, text=TEXT)
     # Choices
     items = ("Python", "Desktop", "Frontend", "Backend", "Distribution",
-               "Megawidgets", "Multithreading   ", "Theme|Style",
-               "Autocomplete", "Productivity", "Bullshit", "More...")
+             "Megawidgets", "Multithreading   ", "Theme|Style",
+             "Autocomplete", "Productivity", "Bullshit", "More...")
     page.add(Choice, parent="frame1", flavor="check", items=items,
              selection=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11))
 
@@ -108,6 +110,7 @@ def get_row_1(app):
 
 
 def main():
+    """Demo"""
     app = App(width="920", height="537")
 
     home_page = get_home_page(app)

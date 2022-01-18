@@ -1,103 +1,87 @@
-# Modules Documentation - Overview
+# Modules Documentation
 
-**gaspium.\_\_init\_\_**
+[gaspium](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium/README.md#module-overview)
+<br>
+Main module exposing the classes 'App', 'Page', and the module 'component' that contains default components.
+
+
+[gaspium.app](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.app/README.md#module-overview)
+<br>
+The App class is defined inside this module.
+
+
+[gaspium.component](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component/README.md#module-overview)
+<br>
+This module exposes the default components classes (Button, Frame, Table, et cetera.)
+
+
+[gaspium.component.button](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.button/README.md#module-overview)
 <br>
 No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.__init__/classes.md)
 
-**gaspium.\_\_main\_\_**
+
+[gaspium.component.choice](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.choice/README.md#module-overview)
 <br>
 No description
-<br>
-[constants (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.__main__/constants.md) &nbsp;.&nbsp; [functions (5)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.__main__/functions.md)
 
-**gaspium.app.\_\_init\_\_**
+
+[gaspium.component.editor](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.editor/README.md#module-overview)
 <br>
 No description
-<br>
-[classes (2)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.app.__init__/classes.md)
 
-**gaspium.component.button**
+
+[gaspium.component.entry](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.entry/README.md#module-overview)
 <br>
 No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.button/classes.md)
 
-**gaspium.component.choice**
+
+[gaspium.component.frame](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.frame/README.md#module-overview)
 <br>
 No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.choice/classes.md)
 
-**gaspium.component.editor**
+
+[gaspium.component.image](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.image/README.md#module-overview)
 <br>
 No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.editor/classes.md)
 
-**gaspium.component.entry**
+
+[gaspium.component.label](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.label/README.md#module-overview)
 <br>
 No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.entry/classes.md)
 
-**gaspium.component.frame**
+
+[gaspium.component.litemark](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.litemark/README.md#module-overview)
 <br>
 No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.frame/classes.md)
 
-**gaspium.component.image**
+
+[gaspium.component.optionmenu](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.optionmenu/README.md#module-overview)
 <br>
 No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.image/classes.md)
 
-**gaspium.component.label**
+
+[gaspium.component.pathfield](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.pathfield/README.md#module-overview)
 <br>
 No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.label/classes.md)
 
-**gaspium.component.litemark**
+
+[gaspium.component.spinbox](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.spinbox/README.md#module-overview)
 <br>
 No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.litemark/classes.md)
 
-**gaspium.component.optionmenu**
+
+[gaspium.component.table](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.table/README.md#module-overview)
 <br>
 No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.optionmenu/classes.md)
 
-**gaspium.component.pathfield**
+
+[gaspium.error](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/README.md#module-overview)
 <br>
 No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.pathfield/classes.md)
 
-**gaspium.component.spinbox**
-<br>
-No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.spinbox/classes.md)
 
-**gaspium.component.table**
+[gaspium.page](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.page/README.md#module-overview)
 <br>
-No description
-<br>
-[classes (1)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.component.table/classes.md)
+This Page class is defined inside this module.
 
-**gaspium.error.\_\_init\_\_**
-<br>
-No description
-<br>
-[classes (9)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error.__init__/classes.md)
 
-**gaspium.page.\_\_init\_\_**
-<br>
-No description
-<br>
-[classes (2)](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.page.__init__/classes.md)
