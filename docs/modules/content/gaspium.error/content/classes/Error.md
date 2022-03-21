@@ -2,11 +2,11 @@ Back to [All Modules](https://github.com/pyrustic/gaspium/blob/master/docs/modul
 
 # Module Overview
 
-> **gaspium.error**
-> 
-> No description
->
-> **Classes:** &nbsp; [AlreadyDefinedError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/AlreadyDefinedError.md#class-alreadydefinederror) &nbsp; [ComponentInterfaceError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/ComponentInterfaceError.md#class-componentinterfaceerror) &nbsp; [ComponentNotFoundError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/ComponentNotFoundError.md#class-componentnotfounderror) &nbsp; [DuplicateComponentError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/DuplicateComponentError.md#class-duplicatecomponenterror) &nbsp; [DuplicatePageError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/DuplicatePageError.md#class-duplicatepageerror) &nbsp; [Error](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/Error.md#class-error) &nbsp; [PageNotFoundError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/PageNotFoundError.md#class-pagenotfounderror) &nbsp; [PageStateError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/PageStateError.md#class-pagestateerror)
+**gaspium.error**
+ 
+Errors classes
+
+> **Classes:** &nbsp; [AlreadyDefinedError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/AlreadyDefinedError.md#class-alreadydefinederror) &nbsp;&nbsp; [AppError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/AppError.md#class-apperror) &nbsp;&nbsp; [AppStateError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/AppStateError.md#class-appstateerror) &nbsp;&nbsp; [DuplicatePageError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/DuplicatePageError.md#class-duplicatepageerror) &nbsp;&nbsp; [Error](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/Error.md#class-error) &nbsp;&nbsp; [PageError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/PageError.md#class-pageerror) &nbsp;&nbsp; [PageNotFoundError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/PageNotFoundError.md#class-pagenotfounderror) &nbsp;&nbsp; [PageStateError](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.error/content/classes/PageStateError.md#class-pagestateerror)
 >
 > **Functions:** &nbsp; None
 >
@@ -36,7 +36,9 @@ Initialize self.  See help(type(self)) for accurate signature.
 
 
 
-**Return Value:** None
+
+
+**Return Value:** None.
 
 [Back to Top](#module-overview)
 

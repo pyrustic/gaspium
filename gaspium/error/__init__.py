@@ -1,30 +1,33 @@
+"""Errors classes"""
+
+
 class Error(Exception):
     pass
 
 
-class PageNotFoundError(Error):
+class AppError(Error):
     pass
 
 
-class DuplicatePageError(Error):
+class AlreadyDefinedError(AppError):
     pass
 
 
-class PageStateError(Error):
+class AppStateError(AppError):
     pass
 
 
-class AlreadyDefinedError(Error):
+class PageError(Error):
     pass
 
 
-class DuplicateComponentError(Error):
+class PageNotFoundError(PageError):
     pass
 
 
-class ComponentNotFoundError(Error):
+class DuplicatePageError(PageError):
     pass
 
 
-class ComponentInterfaceError(Error):
+class PageStateError(PageError):
     pass

@@ -1,1 +1,0 @@
-**Discover the [GASP concept](https://github.com/pyrustic/gaspium/blob/master/gasp.md).**
