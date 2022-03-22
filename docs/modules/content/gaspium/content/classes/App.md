@@ -19,7 +19,7 @@ This class is the entry point of your Gaspium app
 object
 
 ## Class Attributes
-
+No class attribute.
 
 ## Class Properties
 |Property|Type|Description|Inherited from|
@@ -48,7 +48,7 @@ object
 
 
 # All Methods
-[\_\_init\_\_](#__init__) &nbsp;&nbsp; [\_apply\_theme](#_apply_theme) &nbsp;&nbsp; [\_apply\_window\_config](#_apply_window_config) &nbsp;&nbsp; [\_center\_window](#_center_window) &nbsp;&nbsp; [\_close\_page](#_close_page) &nbsp;&nbsp; [\_edit\_app\_title](#_edit_app_title) &nbsp;&nbsp; [\_init\_root](#_init_root) &nbsp;&nbsp; [\_maximize\_window](#_maximize_window) &nbsp;&nbsp; [\_new\_pid](#_new_pid) &nbsp;&nbsp; [\_on\_report\_callback\_exception](#_on_report_callback_exception) &nbsp;&nbsp; [\_open\_page](#_open_page) &nbsp;&nbsp; [\_restart](#_restart) &nbsp;&nbsp; [\_set\_title](#_set_title) &nbsp;&nbsp; [\_setup](#_setup) &nbsp;&nbsp; [\_update\_root\_background](#_update_root_background) &nbsp;&nbsp; [add](#add) &nbsp;&nbsp; [clear\_cache](#clear_cache) &nbsp;&nbsp; [exit](#exit) &nbsp;&nbsp; [open](#open) &nbsp;&nbsp; [start](#start) &nbsp;&nbsp; [stop](#stop)
+[\_\_init\_\_](#__init__) &nbsp;&nbsp; [add](#add) &nbsp;&nbsp; [clear\_cache](#clear_cache) &nbsp;&nbsp; [exit](#exit) &nbsp;&nbsp; [open](#open) &nbsp;&nbsp; [start](#start) &nbsp;&nbsp; [stop](#stop) &nbsp;&nbsp; [\_apply\_theme](#_apply_theme) &nbsp;&nbsp; [\_apply\_window\_config](#_apply_window_config) &nbsp;&nbsp; [\_center\_window](#_center_window) &nbsp;&nbsp; [\_close\_page](#_close_page) &nbsp;&nbsp; [\_edit\_app\_title](#_edit_app_title) &nbsp;&nbsp; [\_init\_root](#_init_root) &nbsp;&nbsp; [\_maximize\_window](#_maximize_window) &nbsp;&nbsp; [\_new\_pid](#_new_pid) &nbsp;&nbsp; [\_on\_report\_callback\_exception](#_on_report_callback_exception) &nbsp;&nbsp; [\_open\_page](#_open_page) &nbsp;&nbsp; [\_restart](#_restart) &nbsp;&nbsp; [\_set\_title](#_set_title) &nbsp;&nbsp; [\_setup](#_setup) &nbsp;&nbsp; [\_update\_root\_background](#_update_root_background)
 
 ## \_\_init\_\_
 Initialization.
@@ -56,7 +56,7 @@ Initialization.
 
 
 
-**Signature:** (self, title='Application', geometry='800x500', theme=<tkstyle.Theme object at 0x7ff48f1e31f0>, caching=False, resizable=(True, True), on\_stop=None, on\_exit=None, crash\_resistant=True, navbar=<class 'gaspium.misc.Navbar'>)
+**Signature:** (self, title='Application', geometry='800x500', theme=<tkstyle.Theme object at 0x7fa81e0f2040>, caching=False, resizable=(True, True), on\_stop=None, on\_exit=None, crash\_resistant=True, navbar=<class 'gaspium.misc.Navbar'>)
 
 |Parameter|Description|
 |---|---|
@@ -74,235 +74,7 @@ Initialization.
 
 
 
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_apply\_theme
-None
-
-
-
-**Signature:** (self)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_apply\_window\_config
-None
-
-
-
-**Signature:** (self)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_center\_window
-Center the window
-
-
-
-**Signature:** (self)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_close\_page
-None
-
-
-
-**Signature:** (self, pid)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_edit\_app\_title
-None
-
-
-
-**Signature:** (self, pid)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_init\_root
-None
-
-
-
-**Signature:** (self)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_maximize\_window
-Maximize the window
-
-
-
-**Signature:** (self)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_new\_pid
-Generate a new valid PID (Page ID).
-A PID value follows this pattern: 'pid-x', with x being an integer
-
-[return value]
-A new valid PID
-
-
-
-**Signature:** (self)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_on\_report\_callback\_exception
-None
-
-
-
-**Signature:** (self, exc, val, tb)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_open\_page
-None
-
-
-
-**Signature:** (self, pid, data)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_restart
-None
-
-
-
-**Signature:** (self)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_set\_title
-None
-
-
-
-**Signature:** (self)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_setup
-None
-
-
-
-**Signature:** (self)
-
-
-
-
-
-**Return Value:** None.
-
-[Back to Top](#module-overview)
-
-
-## \_update\_root\_background
-None
-
-
-
-**Signature:** (self, body)
-
-
-
-
-
-**Return Value:** None.
+**Return Value:** None
 
 [Back to Top](#module-overview)
 
@@ -334,7 +106,7 @@ will call the layout function to complete the process
 
 
 
-**Return Value:** ['Returns the pid (Page ID)']
+**Return Value:** Returns the pid (Page ID)
 
 [Back to Top](#module-overview)
 
@@ -355,7 +127,7 @@ Clear the cache.
 
 
 
-**Return Value:** ['Returns True or False']
+**Return Value:** Returns True or False
 
 [Back to Top](#module-overview)
 
@@ -371,7 +143,7 @@ Exit the app after calling the stop method
 
 
 
-**Return Value:** None.
+**Return Value:** None
 
 [Back to Top](#module-overview)
 
@@ -398,7 +170,7 @@ Open a page specified by its PID (Page ID).
 
 
 
-**Return Value:** ['None']
+**Return Value:** None
 
 [Back to Top](#module-overview)
 
@@ -414,7 +186,7 @@ Start the app. Mainloop here.
 
 
 
-**Return Value:** None.
+**Return Value:** None
 
 [Back to Top](#module-overview)
 
@@ -430,7 +202,235 @@ Stop the app, i.e. destroy the window
 
 
 
-**Return Value:** None.
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_apply\_theme
+None
+
+
+
+**Signature:** (self)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_apply\_window\_config
+None
+
+
+
+**Signature:** (self)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_center\_window
+Center the window
+
+
+
+**Signature:** (self)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_close\_page
+None
+
+
+
+**Signature:** (self, pid)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_edit\_app\_title
+None
+
+
+
+**Signature:** (self, pid)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_init\_root
+None
+
+
+
+**Signature:** (self)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_maximize\_window
+Maximize the window
+
+
+
+**Signature:** (self)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_new\_pid
+Generate a new valid PID (Page ID).
+A PID value follows this pattern: 'pid-x', with x being an integer
+
+[return value]
+A new valid PID
+
+
+
+**Signature:** (self)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_on\_report\_callback\_exception
+None
+
+
+
+**Signature:** (self, exc, val, tb)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_open\_page
+None
+
+
+
+**Signature:** (self, pid, data)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_restart
+None
+
+
+
+**Signature:** (self)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_set\_title
+None
+
+
+
+**Signature:** (self)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_setup
+None
+
+
+
+**Signature:** (self)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_update\_root\_background
+None
+
+
+
+**Signature:** (self, body)
+
+
+
+
+
+**Return Value:** None
 
 [Back to Top](#module-overview)
 
