@@ -57,7 +57,71 @@ The `App` class accepts arguments like the theme to use, the geometry of the win
 A **Page** is either a function or a [Viewable](https://github.com/pyrustic/viewable) subclass. Each Page added to the App instance is either manually or automatically assigned a unique page identifier, the PID, and automatically referenced in the navigation bar. A page is rebuilt or not at each opening depending on whether the `caching` feature has been activated or not.
 
 ```python
+import tkinter as tk
+from viewable import Viewable
+from gaspium import App
 
+
+def home_page(context):
+    """Home Page. Must accept the context argument"""
+    # the context contains some useful objects
+    app = context.app
+    pid = context.pid
+    data = context.data
+    root = context.root
+    # the page function must returns the body
+    # i.e. the graphical container of the page
+    body = tk.Frame(root)
+    label = tk.Label(body, text="Home")
+    label.pack()
+    return body
+
+
+class LoginPage(Viewable):
+    """
+    Login Page
+    """
+
+    def __init__(self, context):
+        """
+        The constructor must accept the context argument
+        """
+        super().__init__()
+        # the context contains some useful objects
+        self._app = context.app
+        self._pid = context.pid
+        self._data = context.data
+        self._root = context.root
+        # the body of the page
+        self._body = None
+
+    def _build(self):
+        self._body = tk.Frame(self._root)
+        label = tk.Label(self._body, text="Login")
+        label.pack()
+
+
+def on_open_home(context):
+    """
+    This on_open callback must accept a context object
+    """
+    # redirect to login_page
+    # instead of letting the home_page open
+    app = context.app
+    app.open("login")
+
+
+app = App(caching=False)
+
+# Add home_page and bind the 'on_open_home' callback
+# to perform a custom redirection to login_page
+app.add(home_page, title="Home", on_open=on_open_home)
+
+# Add login_page (it won't be referenced in the navigation bar)
+app.add(LoginPage, pid="login", title="Login", indexable=False)
+
+# The home page will open automatically
+app.start()
 ```
 
 **Play with the [Demo](https://gist.github.com/pyrustic/79c9ee0efde8c06b7d4685f3c58b7761).**
@@ -99,7 +163,6 @@ $ pip install gaspium
 ## Upgrade
 ```bash
 $ pip install gaspium --upgrade --upgrade-strategy eager
-
 ```
 
 
