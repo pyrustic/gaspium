@@ -21,13 +21,109 @@ This project is part of the [Pyrustic Open Ecosystem](https://pyrustic.github.io
 # Overview
 **Gaspium** is a framework that allows you to create applications with the **GASP** (**G**UI **A**s **S**tapled **P**ages) metaphor. 
 
-In short, we define **pages** to which we add graphical **components**. Then we add these **pages** to an instance of the **App** class. The first **page** added is de facto the **home page** and it will be open when the application is started.Adding a **page** makes it automatically referenced in the application's **navigation bar**. You can open an arbitrary **page** of your application directly from the **command line**.
+In short, we define **pages** to which we add graphical **components**. Then we add these **pages** to an instance of the **App** class. The first **page** added is de facto the **home page** and it will be open when the application is started. Adding a **page** makes it automatically referenced in the application's **navigation bar**. You can open an arbitrary **page** of your application directly from the **command line**.
 
 **Gaspium** serves as the reference implementation of the **GASP concept**. 
 
 **Discover the [GASP concept](https://github.com/pyrustic/gaspium/blob/master/gasp.md) !**
 
+# App
 
+It is the main class of the Framework. An instance of the App class represents the running application. It is to this instance that the developer adds Pages.
+
+```python
+from gaspium import App
+
+
+app = App()
+
+# ...
+# Here you add pages to the app
+# The first page is considered the home page
+# ...
+
+# The last line starts the app (mainloop)
+# The home page will open automatically
+app.start()
+```
+The `App` class accepts arguments like the theme to use, the geometry of the window, whether the caching should be enabled or not, et cetera. The `App` class also has the `add` method to add a page to the application, `open` method to open a page, `start` method to start the application, `exit` method to exit the application, et cetera.
+
+> **Read the App [documentation](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.app/content/classes/App.md#class-app).**
+
+# Page
+A **Page** is either a function or a [Viewable](https://github.com/pyrustic/viewable) subclass. Each Page added to the App instance is either manually or automatically assigned a unique page identifier, the PID, and automatically referenced in the navigation bar. A page is rebuilt or not at each opening depending on whether the `caching` feature has been activated or not.
+
+```python
+import tkinter as tk
+from viewable import Viewable
+from gaspium import App
+
+
+def home_page(context):
+    """Home Page. Must accept the context argument"""
+    # the context contains some useful objects
+    app = context.app
+    pid = context.pid
+    data = context.data
+    root = context.root
+    # the page function must returns the body
+    # i.e. the graphical container of the page
+    body = tk.Frame(root)
+    label = tk.Label(body, text="Home")
+    label.pack()
+    return body
+
+
+class LoginPage(Viewable):
+    """
+    Login Page.
+    This class must have a 'build' method and a 'body' property
+    """
+
+    def __init__(self, context):
+        """
+        The constructor must accept the context argument
+        """
+        super().__init__()
+        # the context contains some useful objects
+        self._app = context.app
+        self._pid = context.pid
+        self._data = context.data
+        self._root = context.root
+        # the body of the page
+        self._body = None
+
+    def _build(self):
+        self._body = tk.Frame(self._root)
+        label = tk.Label(self._body, text="Login")
+        label.pack()
+
+
+def on_open_home(context):
+    """
+    This on_open callback must accept a context object
+    """
+    # redirect to login_page
+    # instead of letting the home_page open
+    app = context.app
+    app.open("login")
+
+
+# For more on constructor parameters, check the reference implementation
+app = App(caching=True)
+
+# Add home_page and bind the 'on_open_home' callback
+# to perform a custom redirection to login_page
+app.add(home_page, title="Home", on_open=on_open_home)
+
+# Add login_page (it won't be referenced in the navigation bar)
+app.add(LoginPage, pid="login", title="Login", indexable=False)
+
+# The home page will open automatically
+app.start()
+```
+
+**Play with the [Demo](https://gist.github.com/pyrustic/79c9ee0efde8c06b7d4685f3c58b7761).**
 
 # Batteries included
 **Gaspium** comes with a handful of useful lightweight packages.

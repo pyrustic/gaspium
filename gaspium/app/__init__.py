@@ -325,7 +325,7 @@ class App:
             message = "This method shouldn't be called twice. Please use 'restart' instead"
             raise error.AppStateError(message)
         # add "help" page
-        if "help" not in self._pages:
+        if self._pages and "help" not in self._pages:
             self.add(misc.default_help_page, pid="help", indexable=False)
         self._started = True
         self._set_title()
