@@ -14,6 +14,9 @@ This project is part of the [Pyrustic Open Ecosystem](https://pyrustic.github.io
 
 ## Table of contents
 - [Overview](#overview)
+- [App](#app)
+- [Page](#page)
+- [Command line aware](#command-line-aware)
 - [Batteries included](#batteries-included)
 - [Installation](#installation)
 - [Demo](#demo) 
@@ -58,6 +61,15 @@ A **Page** is either a function or a [Viewable](https://github.com/pyrustic/view
 ```
 
 **Play with the [Demo](https://gist.github.com/pyrustic/79c9ee0efde8c06b7d4685f3c58b7761).**
+
+# Command line aware
+
+By default, when you run a GASP application, the first page added to the App instance opens as the home page. It is possible to open an arbitrary page of the application from the command line. To do this, just put its PID (Page ID) as an argument on the command line. The strings entered after the identifier are considered as data to be sent to the page when it is opened.
+
+```bash
+$ my-app login "Alex Rustic"
+# the login page will open
+```
 
 # Batteries included
 **Gaspium** comes with a handful of useful lightweight packages.
