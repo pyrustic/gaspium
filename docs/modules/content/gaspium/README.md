@@ -4,7 +4,7 @@ Back to [All Modules](https://github.com/pyrustic/gaspium/blob/master/docs/modul
 
 **gaspium**
  
-Main module exposing the class 'App'
+Main module exposing the class 'App'.
 
 > **Classes:** &nbsp; [App](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium/content/classes/App.md#class-app)
 >

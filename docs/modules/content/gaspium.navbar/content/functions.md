@@ -2,11 +2,11 @@ Back to [All Modules](https://github.com/pyrustic/gaspium/blob/master/docs/modul
 
 # Module Overview
 
-**gaspium**
+**gaspium.navbar**
  
-Main module exposing the class 'App'.
+No description
 
-> **Classes:** &nbsp; [App](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium/content/classes/App.md#class-app)
+> **Classes:** &nbsp; [Navbar](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium.navbar/content/classes/Navbar.md#class-navbar)
 >
 > **Functions:** &nbsp; None
 >

@@ -1,32 +1,48 @@
 """The App class is defined inside this module."""
+import os
+import os.path
 import sys
 import platform
 import tkinter as tk
 import tkutil
 from gaspium import error
-from gaspium import misc
-from cyberpunk_theme import get_theme
+from gaspium import util
+from gaspium import dto
+from gaspium.navbar import Navbar
+from viewstack import ViewStack
+
+
+USER_CACHE_DIR = os.path.join(os.path.expanduser("~"),
+                              "PyrusticHome", "gaspium")
 
 
 class App:
     """This class is the entry point of your Gaspium app"""
-    def __init__(self, title="Application", geometry="800x500",
-                 theme=get_theme(), caching=False,
-                 resizable=(True, True), on_stop=None, on_exit=None,
-                 crash_resistant=True, navbar=misc.Navbar):
+    def __init__(self, name="app", title="Application", manager=None,
+                 geometry="800x500", remember_geometry_change=True,
+                 resizable=(True, True), caching=True, on_stop=None,
+                 on_exit=None, failfast=True, show_page_title=True,
+                 navbar=Navbar, page_from_cli=True):
         """
         Initialization.
 
         [parameters]
+        - name: string, unique name of this app
+
         - title: string, the title of the app
 
+        - manager: the instance of a manager
+
         - geometry: str, to specify the geometry. Put "max" to maximize the window. Example: "800x400", "800x400+0+0", "+0+0", "max"
+
+        - remember_geometry_change: boolean, to specify if the window's geometry should be remembered.
+
+        - resizable: 2-tuple of booleans to tell if you want the width and the height of the app to
+         be resizable.
 
         - theme: the theme, i.e. an instance of tkstyle.Theme
 
         - caching: boolean to tell if whether you want pages to be cached or re-built at open.
-
-        - resizable: 2-tuple of booleans to tell if you want the width and the height of the app to be resizable.
 
         - on_stop: the on_stop handler, i.e. a function that will be called when the app is going to close.
         This function should accept an argument: the app instance
@@ -34,35 +50,57 @@ class App:
         - on_exit: the on_exit handler, i.e. a function that will be called when the app is going to exit.
         This function should accept an argument: the app instance
 
-        - crash_resistant: boolean, set it to True if you don't want the GUI to close when a random exception is raised
+        - failfast: boolean, set it to True if you don't want the GUI to close when a random exception is raised
+
+        - show_page_title: boolean, set True to allow the app to update the window title to show the current page title.
 
         - navbar: navigation bar class. The constructor must accept the app instance.
         The class must have an "add" method that accepts these arguments: pid, title, and category
+
+        - page_from_cli: boolean, specify if pages can be opened directly from cli or not.
+
         """
+        self._name = name
         self._title = title
+        self._manager = manager
         self._geometry = geometry
-        self._theme = theme
-        self._caching = caching
+        self._remember_geometry_change = remember_geometry_change
         self._resizable = resizable
+        self._caching = caching
         self._on_stop = on_stop
         self._on_exit = on_exit
+        self._failfast = failfast
+        self._show_page_title = show_page_title
+        self._navbar = navbar
+        self._page_from_cli = page_from_cli
+        
         self._root = None
-        self._init_root()
         self._pages = {}
         self._pid = None
-        self._navbar = navbar(self) if navbar else None
+        self._pid_from_cli = None
         self._started = False
         self._stopped = False
+        self._pre_started = False
+        self._clargs = None
         self._i = 0
         self._data = dict()
-        self._crash_resistant = crash_resistant
         self._cached_report_callback_exception = None
         self._home_pid = None
         self._opening_pages_count = 0
         self._closing_page = False
         self._opening_page = False
-        self._delayed_open_request = []
+        self._history = list()
+        self._previously_mapped = False
+        self._on_destroy_root_i = 0
+        self._viewstack = None
         self._setup()
+
+    @property
+    def name(self):
+        """
+        Return the name of the app
+        """
+        return self._name
 
     @property
     def title(self):
@@ -81,6 +119,10 @@ class App:
         self._title = val
 
     @property
+    def manager(self):
+        return self._manager
+
+    @property
     def geometry(self):
         """
         Return the geometry of the app
@@ -95,21 +137,6 @@ class App:
         if self._started and self._geometry:
             raise error.AlreadyDefinedError
         self._geometry = val
-
-    @property
-    def theme(self):
-        """
-        Return the current theme
-        """
-        return self._theme
-
-    @theme.setter
-    def theme(self, val):
-        """
-        Set a theme, i.e., a tkstyle.Theme instance
-        """
-        self._theme = val
-        self._apply_theme()
 
     @property
     def caching(self):
@@ -176,14 +203,14 @@ class App:
         self._on_exit = val
 
     @property
-    def crash_resistant(self):
-        """Get the crash_resistant boolean"""
-        return self._crash_resistant
+    def failfast(self):
+        """Get the failfast boolean"""
+        return self._failfast
 
-    @crash_resistant.setter
-    def crash_resistant(self, val):
-        """Set the crash_resistant boolean"""
-        self._crash_resistant = val
+    @failfast.setter
+    def failfast(self, val):
+        """Set the failfast boolean"""
+        self._failfast = val
 
     @property
     def pid(self):
@@ -193,12 +220,37 @@ class App:
         return self._pid
 
     @property
+    def page(self):
+        """
+        Return the currently opened page DTO representation
+        """
+        if not self._pid:
+            return None
+        page_info = self._pages.get(self._pid)
+        if not page_info:
+            return None
+        return self._create_page_info_dto(page_info)
+
+    @property
+    def view(self):
+        """Returns the current view"""
+        if not self._pid:
+            return None
+        page_info = self._pages.get(self._pid)
+        if not page_info:
+            return None
+        return page_info["view"]
+
+    @property
     def pages(self):
         """
-        Return the copy of an internal dictionary that contains pages information.
+        Return a dictionary of DTOs that contain pages information.
         Note: Keys are PIDs (Page ID)
         """
-        return self._pages.copy()
+        cache = dict()
+        for pid, page_info in self._pages.items():
+            cache[pid] = self._create_page_info_dto(page_info)
+        return cache
 
     @property
     def root(self):
@@ -206,6 +258,10 @@ class App:
         Return the root, i.e. the Tkinter's Tk instance that serves as the root of this app.
         """
         return self._root
+
+    @property
+    def viewstack(self):
+        return self._viewstack
 
     @property
     def data(self):
@@ -217,15 +273,24 @@ class App:
         """
         return self._data
 
-    def add(self, view, pid=None, title=None, category=None,
-            indexable=True, on_open=None, on_close=None):
+    @property
+    def clargs(self):
+        """Command line arguments"""
+        return self._clargs
+
+    @property
+    def history(self):
+        return self._history.copy()
+
+    def attach(self, view_class, pid=None, title=None, category=None,
+               indexable=True, kwargs=None):
         """
-        Add a new page to the app. This method will generate a new page instance then
+        Attach a new page to the app. This method will generate a new page instance then
         will call the layout function to complete the process
 
         [parameters]
-        - view: either a structured view class (a Viewable subclass) or a plain view function (returning a widget).
-        The view takes the page instance as argument.
+        - view_class: a view class (i.e. a class that subclassed gaspium.Page).
+        The Context instance is passed to the constructor of the view.
 
         - pid: str, the Page ID. A PID will be automatically generated if you don't set one.
          Note that the first added page is de facto the home page and if you don't assign a PID,
@@ -237,14 +302,10 @@ class App:
 
         - indexable: boolean, to tell if you want the page to be indexed on the menu bar or not.
 
-        - on_open: function to call when the page is opened.
-        It should accept an argument: the context (namedtuple)
-
-        - on_close: function to call when the page is closed.
-        It should accept an argument: the context (namedtuple)
+        - kwargs: dict representing the keyword-arguments to pass to the view_class constructor.
 
         [exceptions]
-        - gaspium.error.DuplicatePageError: raised if the page name already exists
+        - gaspium.error.DuplicatePageError: raised if the page id already exists
 
         [return]
         Returns the pid (Page ID)
@@ -258,38 +319,36 @@ class App:
                 pid = self._new_pid()
         if not self._pages:
             self._home_pid = pid
-        view_type = misc.get_view_type(view)
         title = title if title else pid
-        self._pages[pid] = {"view": view, "title": title, "view_type": view_type,
-                            "category": category, "indexable": indexable,
-                            "on_open": on_open, "on_close": on_close,
-                            "body": None}
+        kwargs = kwargs if kwargs else dict()
+        self._pages[pid] = {"pid": pid, "view_class": view_class, "view": None,
+                            "title": title, "category": category,
+                            "indexable": indexable, "kwargs": kwargs}
         if indexable and self._navbar:
-            self._navbar.add(pid, title, category)
+            self._navbar.attach(pid, title, category)
         return pid
 
-    def open(self, pid, data=None):
+    def detach(self, pid):
+        if pid in self._pages:
+            del self._pages[pid]
+            self._navbar.detach(pid)
+
+    def open(self, pid):
         """
         Open a page specified by its PID (Page ID).
 
         [parameters]
         - pid: PID
 
-        - data: Associated data. This data is passed to the 'on_open' callback of the page.
-         Note: If you open this page from the command line, the data passed to the page
-          is split into a tuple.
-
         [exceptions]
         - gaspium.error.PageNotFoundError: raised if not page is associated to this PID.
         - gaspium.error.PageStateError: raised if you try to open a new page inside 'on_close' callback.
 
         [return]
-        None
+        the view opened
         """
-        if not self._started:
-            cache = (pid, data)
-            self._delayed_open_request.append(cache)
-            return
+        if not self._pre_started:
+            self._pre_start()
         if self._closing_page:
             msg = "Don't open a new page inside 'on_close' callback"
             raise error.PageStateError(msg)
@@ -297,25 +356,16 @@ class App:
             raise error.PageNotFoundError
         self._opening_pages_count += 1
         cache_opening_pages_count = self._opening_pages_count
-        on_open = self._pages[pid]["on_open"]
-        if self._pid and not self._opening_page:
-            on_close = self._pages[self._pid]["on_close"]
-            body = self._pages[self._pid]["body"]
-            if on_close:
-                context = misc.create_context_2(self, self.root, self._pid, body)
-                self._closing_page = True
-                on_close(context)
-                self._closing_page = False
+        if self._pid:
             self._close_page(self._pid)
-        if on_open:
-            context = misc.create_context_1(self, self._root, pid, data)
-            self._opening_page = True
-            on_open(context)
-            self._opening_page = False
-        if cache_opening_pages_count == self._opening_pages_count:
-            self._pid = pid
-            self._open_page(pid, data)
+        if cache_opening_pages_count != self._opening_pages_count:
+            return
+        self._pid = pid
+        view = self._open_page(pid)
+        if self._show_page_title:
             self._edit_app_title(pid)
+        self._history.append(pid)
+        return view
 
     def start(self):
         """
@@ -324,30 +374,17 @@ class App:
         if self._started:
             message = "This method shouldn't be called twice. Please use 'restart' instead"
             raise error.AppStateError(message)
-        # add "help" page
-        if self._pages and "help" not in self._pages:
-            self.add(misc.default_help_page, pid="help", indexable=False)
+        if not self._pre_started:
+            self._pre_start()
         self._started = True
-        self._set_title()
-        self._apply_window_config()
-        # check cli request
-        pid, data = misc.check_cli_request()
-        if pid:
-            cache = (pid, data)
-            self._delayed_open_request = [cache]
-            if pid not in self.pages:
-                print("This Page doesn't exist.")
+        if self._home_pid:
+            self.open(self._home_pid)
+        if self._pid_from_cli:
+            if self._pid_from_cli in self._pages:
+                self.open(self._pid_from_cli)
+            else:
+                print("Undefined page '{}'".format(self._pid_from_cli))
                 self.exit()
-        else:
-            data = None
-            pid = self._home_pid
-            if pid and not self._delayed_open_request:
-                cache = (pid, data)
-                self._delayed_open_request.append(cache)
-
-        for pid, data in self._delayed_open_request:
-            self.open(pid, data=data)
-        self._delayed_open_request = []
         # main loop
         try:
             self._root.mainloop()
@@ -384,16 +421,21 @@ class App:
             page_info = self._pages.get(pid)
             if not page_info:
                 return False
-            page_info["body"] = None
+            page_info["container"] = None
             return True
         for pid, page_info in self._pages:
-            page_info["body"] = None
+            page_info["container"] = None
         return True
 
     def exit(self):
         """
         Exit the app after calling the stop method
         """
+        if self._remember_geometry_change:
+            try:
+                tkutil.save_geometry(self._root, name=self._name)
+            except Exception as e:
+                print(e)
         self.stop()
         if self._on_exit:
             try:
@@ -403,16 +445,24 @@ class App:
         sys.exit()
 
     def _setup(self):
+        self._init_root()
+        self._viewstack = ViewStack(self._root)
+        self._navbar = self._navbar(self) if self._navbar else None
         self._root.config(background="white")
         self._cached_report_callback_exception = self._root.report_callback_exception
         self._root.report_callback_exception = self._on_report_callback_exception
-        self._root.protocol("WM_DELETE_WINDOW", self.exit)
-        misc.EnhanceTk(self._root)
+        self._root.protocol("WM_DELETE_WINDOW", self._root.destroy)
+        util.EnhanceTk(self._root)
 
     def _init_root(self):
         self._root = tk.Tk()
-        if self._theme:
-            self._theme.apply(self._root)
+        tkutil.WinfoUpdater(self._root).activate()
+        self._root.bind("<Destroy>", self._destroy_root, True)
+
+    def _destroy_root(self, event):
+        if event.widget is not self._root:
+            return
+        self.exit()
 
     def _new_pid(self):
         """
@@ -424,25 +474,23 @@ class App:
         """
         while True:
             self._i += 1
-            pid = "pid-{}".format(self._i)
+            pid = "page{}".format(self._i)
             if pid not in self._pages:
                 return pid
 
     def _set_title(self):
         if not self._title:
             self._title = "Application"
-        text = "{} | built with Gaspium".format(self._title)
-        self._root.title(text)
-
-    def _apply_theme(self):
-        if not self._theme:
-            return
-        self._root.option_clear()
-        self._theme.apply(self._root)
+        self._root.title(self._title)
 
     def _apply_window_config(self):
         # geometry
-        if self._geometry == "max":
+        #saved_geometry = self._get_saved_window_geometry()
+        if self._remember_geometry_change:
+            default = "" if self._geometry == "max" else self._geometry
+            tkutil.restore_geometry(self._root, name=self._name,
+                                    default=default)
+        elif self._geometry == "max":
             self._maximize_window()
         else:
             self._root.geometry(self._geometry)
@@ -454,7 +502,7 @@ class App:
 
     def _on_report_callback_exception(self, exc, val, tb):
         self._cached_report_callback_exception(exc, val, tb)
-        if not self._crash_resistant:
+        if not self._failfast:
             self.exit()
 
     def _maximize_window(self):
@@ -471,40 +519,31 @@ class App:
         """
         Center the window
         """
-        tkutil.center_window(self._root)
+        tkutil.center(self._root)
+
+    def _open_page(self, pid):
+        page_info = self._pages[pid]
+        view = self._viewstack.views.get(pid)
+        if view:
+            self._viewstack.lift(pid)
+            return view
+        view_class = page_info["view_class"]
+        kwargs = page_info["kwargs"]
+        context = dto.Context(self, self._root, pid, self._manager)
+        view = view_class(context, **kwargs)
+        self._viewstack.add(pid, view)
+        self._pages[pid]["view"] = view
+        return view
 
     def _close_page(self, pid):
-        page_info = self._pages[pid]
-        body = page_info["body"]
-        if self._caching:
-            if body:
-                body.pack_forget()
-        else:
-            if body:
-                body.pack_forget()
-                body.destroy()
-            self._pages[pid]["body"] = None
-
-    def _open_page(self, pid, data):
-        page_info = self._pages[pid]
-        view = page_info["view"]
-        body = page_info["body"]
-        view_type = page_info["view_type"]
-        if not self._caching or (self._caching and not body):
-            context = misc.create_context_1(self, self._root, pid, data)
-            cache = view(context)
-            if view_type == "class":
-                body = cache.build()
-            else:
-                body = cache
-        if body:
-            body.pack(fill=tk.BOTH, expand=1, padx=0, pady=0)
-            self._update_root_background(body)
-        self._pages[pid]["body"] = body
-
-    def _update_root_background(self, body):
-        background = body.cget("background")
-        self._root.config(background=background)
+        cache = self._viewstack.views.get(pid)
+        if not cache:
+            return
+        if not self._caching:
+            self._viewstack.destroy(pid)
+            self._pages[pid]["view"] = None
+            return
+        self._pages[pid]["container"] = None
 
     def _edit_app_title(self, pid):
         page_info = self._pages[pid]
@@ -513,14 +552,64 @@ class App:
         cache = cache.format(self._title, page_title)
         self._root.title(cache)
 
-    def _restart(self):  # TODO: make it public
+    def _pre_start(self):
+        # add "help" page
+        if self._pages and "help" not in self._pages:
+            self.attach(util.default_help_page, pid="help", indexable=False)
+        self._set_title()
+        self._apply_window_config()
+        # check cli request
+        if self._page_from_cli:
+            pid, data = util.check_cli_request()
+            self._pid_from_cli = pid
+            self._clargs = data
+        self._pre_started = True
+
+    # not used at all
+    def __restart(self):  # TODO: make it public, improve it
         self._pid = None
         #_menubar.delete(0, "end")
         #self._root.config(menu="")
         for pid, page_info in self._pages.items():
-            body = page_info["body"]
-            if body:
-                body.destroy()
-                page_info["body"] = None
+            view = page_info["view"]
+            if view.body.winfo_exists():
+                view.body.destroy()
+                page_info["view"] = None
         if self._home_pid:
             self.open(self._home_pid)
+
+    def _create_page_info_dto(self, page_info):
+        page_dto = dto.Page(page_info["pid"], page_info["view_class"],
+                            page_info["view"],
+                            page_info["title"], page_info["category"],
+                            page_info["indexable"], page_info["kwargs"])
+        return page_dto
+
+    """
+    def _save_window_geometry(self):
+        if not self._remember_geometry_change:
+            return
+        geometry = "{}x{}+{}+{}".format(self._root.winfo_width(),
+                                        self._root.winfo_height(),
+                                        self._root.winfo_x(),
+                                        self._root.winfo_y())
+        geometry_dir = os.path.join(USER_CACHE_DIR, "geometry")
+        geometry_filename = os.path.join(geometry_dir, self._name)
+        if not os.path.isdir(geometry_dir):
+            os.makedirs(geometry_dir)
+        if geometry.startswith("0") or geometry.startswith("1x1"):
+            return
+        with open(geometry_filename, "w") as file:
+            file.write(geometry)
+
+    def _get_saved_window_geometry(self):
+        geometry_dir = os.path.join(USER_CACHE_DIR, "geometry")
+        geometry_filename = os.path.join(geometry_dir, self._name)
+        if not os.path.isfile(geometry_filename):
+            return None
+        with open(geometry_filename, "r") as file:
+            data = file.read()
+        return data.strip()
+    """
+
+# TODO: add to App constructor a cache_size (int) param to set max number of pages that can be cached

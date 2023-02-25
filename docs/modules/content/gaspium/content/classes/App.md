@@ -4,7 +4,7 @@ Back to [All Modules](https://github.com/pyrustic/gaspium/blob/master/docs/modul
 
 **gaspium**
  
-Main module exposing the class 'App'
+Main module exposing the class 'App'.
 
 > **Classes:** &nbsp; [App](https://github.com/pyrustic/gaspium/blob/master/docs/modules/content/gaspium/content/classes/App.md#class-app)
 >
@@ -19,36 +19,41 @@ This class is the entry point of your Gaspium app
 object
 
 ## Class Attributes
-No class attribute.
+No class attributes.
 
 ## Class Properties
 |Property|Type|Description|Inherited from|
 |---|---|---|---|
 |caching|getter|Return a boolean to indicate if the caching option is set to True or False.||
 |caching|setter|Set True if you want pages to be cached. Cached pages retains their data.||
-|crash_resistant|getter|Get the crash_resistant boolean||
-|crash_resistant|setter|Set the crash_resistant boolean||
+|clargs|getter|Command line arguments||
 |data|getter|This is an empty dictionary linked to this app. Use it to store whatever you want. Example: you can use it to retain the information about whether  the user is authenticated or not.||
+|failfast|getter|Get the failfast boolean||
+|failfast|setter|Set the failfast boolean||
 |geometry|getter|Return the geometry of the app||
 |geometry|setter|Set the geometry of the app||
+|history|getter|None||
+|manager|getter|None||
+|name|getter|Return the name of the app||
 |on_exit|getter|Return the on_exit callback||
 |on_exit|setter|Set the on_exit handler. The handler is a function that accepts the app instance as argument||
 |on_stop|getter|Return the on_stop callback||
 |on_stop|setter|Set the on_stop handler. The handler is a function that accepts the app instance as argument||
-|pages|getter|Return the copy of an internal dictionary that contains pages information. Note: Keys are PIDs (Page ID)||
+|page|getter|Return the currently opened page DTO representation||
+|pages|getter|Return a dictionary of DTOs that contain pages information. Note: Keys are PIDs (Page ID)||
 |pid|getter|Return the currently opened Page ID||
 |resizable|getter|Return the resizable booleans tuple||
 |resizable|setter|Set the resizable booleans tuple||
 |root|getter|Return the root, i.e. the Tkinter's Tk instance that serves as the root of this app.||
-|theme|getter|Return the current theme||
-|theme|setter|Set a theme, i.e., a tkstyle.Theme instance||
 |title|getter|Return the title of the app||
 |title|setter|Set the title of the app||
+|view|getter|Returns the current view||
+|viewstack|getter|None||
 
 
 
 # All Methods
-[\_\_init\_\_](#__init__) &nbsp;&nbsp; [add](#add) &nbsp;&nbsp; [clear\_cache](#clear_cache) &nbsp;&nbsp; [exit](#exit) &nbsp;&nbsp; [open](#open) &nbsp;&nbsp; [start](#start) &nbsp;&nbsp; [stop](#stop) &nbsp;&nbsp; [\_apply\_theme](#_apply_theme) &nbsp;&nbsp; [\_apply\_window\_config](#_apply_window_config) &nbsp;&nbsp; [\_center\_window](#_center_window) &nbsp;&nbsp; [\_close\_page](#_close_page) &nbsp;&nbsp; [\_edit\_app\_title](#_edit_app_title) &nbsp;&nbsp; [\_init\_root](#_init_root) &nbsp;&nbsp; [\_maximize\_window](#_maximize_window) &nbsp;&nbsp; [\_new\_pid](#_new_pid) &nbsp;&nbsp; [\_on\_report\_callback\_exception](#_on_report_callback_exception) &nbsp;&nbsp; [\_open\_page](#_open_page) &nbsp;&nbsp; [\_restart](#_restart) &nbsp;&nbsp; [\_set\_title](#_set_title) &nbsp;&nbsp; [\_setup](#_setup) &nbsp;&nbsp; [\_update\_root\_background](#_update_root_background)
+[\_\_init\_\_](#__init__) &nbsp;&nbsp; [attach](#attach) &nbsp;&nbsp; [clear\_cache](#clear_cache) &nbsp;&nbsp; [detach](#detach) &nbsp;&nbsp; [exit](#exit) &nbsp;&nbsp; [open](#open) &nbsp;&nbsp; [start](#start) &nbsp;&nbsp; [stop](#stop) &nbsp;&nbsp; [\_app\_\_restart](#_App__restart) &nbsp;&nbsp; [\_apply\_window\_config](#_apply_window_config) &nbsp;&nbsp; [\_center\_window](#_center_window) &nbsp;&nbsp; [\_close\_page](#_close_page) &nbsp;&nbsp; [\_create\_page\_info\_dto](#_create_page_info_dto) &nbsp;&nbsp; [\_destroy\_root](#_destroy_root) &nbsp;&nbsp; [\_edit\_app\_title](#_edit_app_title) &nbsp;&nbsp; [\_init\_root](#_init_root) &nbsp;&nbsp; [\_maximize\_window](#_maximize_window) &nbsp;&nbsp; [\_new\_pid](#_new_pid) &nbsp;&nbsp; [\_on\_report\_callback\_exception](#_on_report_callback_exception) &nbsp;&nbsp; [\_open\_page](#_open_page) &nbsp;&nbsp; [\_pre\_start](#_pre_start) &nbsp;&nbsp; [\_set\_title](#_set_title) &nbsp;&nbsp; [\_setup](#_setup)
 
 ## \_\_init\_\_
 Initialization.
@@ -56,19 +61,24 @@ Initialization.
 
 
 
-**Signature:** (self, title='Application', geometry='800x500', theme=<tkstyle.Theme object at 0x7fa81e0f2040>, caching=False, resizable=(True, True), on\_stop=None, on\_exit=None, crash\_resistant=True, navbar=<class 'gaspium.misc.Navbar'>)
+**Signature:** (self, name='app', title='Application', manager=None, geometry='800x500', remember\_geometry\_change=True, resizable=(True, True), caching=True, on\_stop=None, on\_exit=None, failfast=True, show\_page\_title=True, navbar=<class 'gaspium.navbar.Navbar'>, page\_from\_cli=True)
 
 |Parameter|Description|
 |---|---|
+|name|string, unique name of this app |
 |title|string, the title of the app |
+|manager|the instance of a manager |
 |geometry|str, to specify the geometry. Put "max" to maximize the window. Example: "800x400", "800x400+0+0", "+0+0", "max" |
+|remember\_geometry\_change|boolean, to specify if the window's geometry should be remembered. |
+|resizable|2-tuple of booleans to tell if you want the width and the height of the app to be resizable. |
 |theme|the theme, i.e. an instance of tkstyle.Theme |
 |caching|boolean to tell if whether you want pages to be cached or re-built at open. |
-|resizable|2-tuple of booleans to tell if you want the width and the height of the app to be resizable. |
 |on\_stop|the on_stop handler, i.e. a function that will be called when the app is going to close. This function should accept an argument: the app instance |
 |on\_exit|the on_exit handler, i.e. a function that will be called when the app is going to exit. This function should accept an argument: the app instance |
-|crash\_resistant|boolean, set it to True if you don't want the GUI to close when a random exception is raised |
-|navbar|navigation bar class. The constructor must accept the app instance. The class must have an "add" method that accepts these arguments: pid, title, and category|
+|failfast|boolean, set it to True if you don't want the GUI to close when a random exception is raised |
+|show\_page\_title|boolean, set True to allow the app to update the window title to show the current page title. |
+|navbar|navigation bar class. The constructor must accept the app instance. The class must have an "add" method that accepts these arguments: pid, title, and category |
+|page\_from\_cli|boolean, specify if pages can be opened directly from cli or not.|
 
 
 
@@ -79,30 +89,29 @@ Initialization.
 [Back to Top](#module-overview)
 
 
-## add
-Add a new page to the app. This method will generate a new page instance then
+## attach
+Attach a new page to the app. This method will generate a new page instance then
 will call the layout function to complete the process
 
 
 
 
-**Signature:** (self, view, pid=None, title=None, category=None, indexable=True, on\_open=None, on\_close=None)
+**Signature:** (self, view\_class, pid=None, title=None, category=None, indexable=True, kwargs=None)
 
 |Parameter|Description|
 |---|---|
-|view|either a structured view class (a Viewable subclass) or a plain view function (returning a widget). The view takes the page instance as argument. |
+|view\_class|a view class (i.e. a class that subclassed gaspium.Page). The Context instance is passed to the constructor of the view. |
 |pid|str, the Page ID. A PID will be automatically generated if you don't set one. Note that the first added page is de facto the home page and if you don't assign a PID, the PID "home" will be assigned to it. |
 |title|the title of the page. By default, it is the pid of the page |
 |category|string, the menu category name under which the page is indexed |
 |indexable|boolean, to tell if you want the page to be indexed on the menu bar or not. |
-|on\_open|function to call when the page is opened. It should accept an argument: the context (namedtuple) |
-|on\_close|function to call when the page is closed. It should accept an argument: the context (namedtuple) |
+|kwargs|dict representing the keyword-arguments to pass to the view_class constructor. |
 
 
 
 |Exception|Description|
 |---|---|
-|gaspium.error.DuplicatePageError|raised if the page name already exists |
+|gaspium.error.DuplicatePageError|raised if the page id already exists |
 
 
 
@@ -132,6 +141,22 @@ Clear the cache.
 [Back to Top](#module-overview)
 
 
+## detach
+No description
+
+
+
+**Signature:** (self, pid)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
 ## exit
 Exit the app after calling the stop method
 
@@ -154,12 +179,11 @@ Open a page specified by its PID (Page ID).
 
 
 
-**Signature:** (self, pid, data=None)
+**Signature:** (self, pid)
 
 |Parameter|Description|
 |---|---|
 |pid|PID |
-|data|Associated data. This data is passed to the 'on_open' callback of the page. Note: If you open this page from the command line, the data passed to the page is split into a tuple. |
 
 
 
@@ -170,7 +194,7 @@ Open a page specified by its PID (Page ID).
 
 
 
-**Return Value:** None
+**Return Value:** the view opened
 
 [Back to Top](#module-overview)
 
@@ -207,8 +231,8 @@ Stop the app, i.e. destroy the window
 [Back to Top](#module-overview)
 
 
-## \_apply\_theme
-None
+## \_App\_\_restart
+No description
 
 
 
@@ -224,7 +248,7 @@ None
 
 
 ## \_apply\_window\_config
-None
+No description
 
 
 
@@ -256,7 +280,7 @@ Center the window
 
 
 ## \_close\_page
-None
+No description
 
 
 
@@ -271,8 +295,40 @@ None
 [Back to Top](#module-overview)
 
 
+## \_create\_page\_info\_dto
+No description
+
+
+
+**Signature:** (self, page\_info)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
+## \_destroy\_root
+No description
+
+
+
+**Signature:** (self, event)
+
+
+
+
+
+**Return Value:** None
+
+[Back to Top](#module-overview)
+
+
 ## \_edit\_app\_title
-None
+No description
 
 
 
@@ -288,7 +344,7 @@ None
 
 
 ## \_init\_root
-None
+No description
 
 
 
@@ -340,7 +396,7 @@ A new valid PID
 
 
 ## \_on\_report\_callback\_exception
-None
+No description
 
 
 
@@ -356,11 +412,11 @@ None
 
 
 ## \_open\_page
-None
+No description
 
 
 
-**Signature:** (self, pid, data)
+**Signature:** (self, pid)
 
 
 
@@ -371,8 +427,8 @@ None
 [Back to Top](#module-overview)
 
 
-## \_restart
-None
+## \_pre\_start
+No description
 
 
 
@@ -388,7 +444,7 @@ None
 
 
 ## \_set\_title
-None
+No description
 
 
 
@@ -404,27 +460,11 @@ None
 
 
 ## \_setup
-None
+No description
 
 
 
 **Signature:** (self)
-
-
-
-
-
-**Return Value:** None
-
-[Back to Top](#module-overview)
-
-
-## \_update\_root\_background
-None
-
-
-
-**Signature:** (self, body)
 
 
 

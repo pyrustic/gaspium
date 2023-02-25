@@ -63,8 +63,8 @@ from gaspium import App
 
 
 def home_page(context):
-    """Home Page. Must accept the context argument"""
-    # the context contains some useful objects
+    """Home Page. Must accept the dto argument"""
+    # the dto contains some useful objects
     app = context.app
     pid = context.pid
     data = context.data
@@ -84,10 +84,10 @@ class LoginPage(Viewable):
 
     def __init__(self, context):
         """
-        The constructor must accept the context argument
+        The constructor must accept the dto argument
         """
         super().__init__()
-        # the context contains some useful objects
+        # the dto contains some useful objects
         self._app = context.app
         self._pid = context.pid
         self._data = context.data
@@ -103,7 +103,7 @@ class LoginPage(Viewable):
 
 def on_open_home(context):
     """
-    This on_open callback must accept a context object
+    This on_open callback must accept a dto object
     """
     # redirect to login_page
     # instead of letting the home_page open

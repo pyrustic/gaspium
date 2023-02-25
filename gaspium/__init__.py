@@ -1,4 +1,4 @@
-"""Main module exposing the class 'App'"""
+"""Main module exposing the class 'App'."""
 from gaspium.app import App
 
 
